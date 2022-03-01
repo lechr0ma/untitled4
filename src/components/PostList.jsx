@@ -8,8 +8,8 @@ const PostList = ({posts, title, rem}) => {
             <h1 style={{textAlign:'center'}}>
                 {title}
             </h1>
-            {posts.map( e=>
-                <PostItem rem={rem} key={e.id} post={e}/>
+            {posts.map( (e, index)=>
+                <PostItem index={index} rem={rem} key={e.id} post={e}/>
             )}
         </div>
     );
