@@ -4,6 +4,7 @@ import PostItem from "./components/PostItem";
 import PostList from "./components/PostList";
 import MyButton from "./components/UI/buttons/MyButton";
 import MyInput from "./components/UI/input/MyInput";
+import PostForm from "./components/PostForm";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -15,35 +16,16 @@ function App() {
             {id:6, title: 'JAvascript11 1 1 1 ', body: 'Description' },
             ]
         )
-    const [title, setTitle] = useState('')
-    const [body, setBody] = useState('')
-
-    function addPost (event) {
-            event.preventDefault()
-        setPosts(posts.concat({id:Date.now(), title: title, body: body }) )
-        setTitle('')
-        setBody('')
 
 
+    function createPost(post) {
+        setPosts([...posts, post])
     }
+
 
   return (
     <div className="App">
-        <form>
-            <MyInput
-                type="text"
-                placeholder='Title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <MyInput
-                type="text"
-                placeholder='Description'
-                value={body}
-                onChange={(e)=> setBody(e.target.value)}
-            />
-            <MyButton onClick={addPost}>Add post</MyButton>
-        </form>
+        <PostForm addPost={createPost}/>
         <PostList posts={posts} title={'JS POSTS'}/>
     </div>
   );
