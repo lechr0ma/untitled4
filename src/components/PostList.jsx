@@ -1,7 +1,7 @@
 import React from 'react';
 import PostItem from "./PostItem";
 
-const PostList = ({posts, title}) => {
+const PostList = ({posts, title, rem}) => {
 
     return (
         <div>
@@ -9,7 +9,7 @@ const PostList = ({posts, title}) => {
                 {title}
             </h1>
             {posts.map( e=>
-                <PostItem key={e.id} post={e}/>
+                <PostItem rem={rem} key={e.id} post={e}/>
             )}
         </div>
     );
