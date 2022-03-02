@@ -9,6 +9,7 @@ import MyInput from "./components/UI/input/MyInput";
 import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/buttons/MyButton";
+import {useSortAndSearch} from "./hooks/usePosts";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -22,27 +23,8 @@ function App() {
         )
     const [filter, setFilter] = useState({sort:'', search:''})
     const [modal, setModal] = useState(false)
+    const sortAndSearch = useSortAndSearch(posts, filter.sort, filter.search )
 
-
-
-    const sortedPosts = useMemo(()=>{
-            console.log('aaaaaa')
-            if (filter.sort){
-                return [...posts]
-                    .sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-            } else {
-                return posts
-            }
-        }, [filter.sort, posts])
-
-    const sortAndSearch = useMemo(() =>{
-        if (filter.search){
-            return sortedPosts.filter(e => e.title.toLowerCase().includes(filter.search)
-                || e.body.toLowerCase().includes(filter.search))
-        } else {
-            return sortedPosts
-        }
-    }, [filter.search, sortedPosts])
 
     function createPost(post) {
         setPosts([...posts, post])
