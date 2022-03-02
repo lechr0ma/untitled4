@@ -6,6 +6,9 @@ import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import SortSelect from "./components/UI/select/SortSelect";
 import MyInput from "./components/UI/input/MyInput";
+import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/modal/MyModal";
+import MyButton from "./components/UI/buttons/MyButton";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -17,36 +20,33 @@ function App() {
             {id:6, title: 'JAvascript 5', body: 'Tescription' },
             ]
         )
-    const [sortBy, setSort] = useState('');
-    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState({sort:'', search:''})
+    const [modal, setModal] = useState(false)
 
 
 
     const sortedPosts = useMemo(()=>{
             console.log('aaaaaa')
-            if (sortBy){
+            if (filter.sort){
                 return [...posts]
-                    .sort((a, b) => a[sortBy].localeCompare(b[sortBy]))
+                    .sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
             } else {
                 return posts
             }
-        }, [sortBy, posts])
+        }, [filter.sort, posts])
 
     const sortAndSearch = useMemo(() =>{
-        if (search){
-            return sortedPosts.filter(e => e.title.toLowerCase().includes(search)
-                || e.body.toLowerCase().includes(search))
+        if (filter.search){
+            return sortedPosts.filter(e => e.title.toLowerCase().includes(filter.search)
+                || e.body.toLowerCase().includes(filter.search))
         } else {
             return sortedPosts
         }
-    }, [search, sortedPosts])
-
-    function sortPosts(sort) {
-        setSort(sort)
-    }
+    }, [filter.search, sortedPosts])
 
     function createPost(post) {
         setPosts([...posts, post])
+        setModal(false)
     }
     function removePost(post) {
         setPosts(posts.filter(e=> e.id !== post.id))
@@ -55,22 +55,15 @@ function App() {
 
   return (
     <div className="App">
-        <PostForm addPost={createPost}/>
-        <hr  style={{margin:'10px 0'}}/>
-        <SortSelect
-            value={sortBy}
-            set={sortPosts}
-            options={[
-                {value: 'title', body: 'title'},
-                {value: 'body', body: 'description'}
-                ]}
-        />
-        <MyInput value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search...'/>
-        {sortAndSearch.length ?
-            <PostList rem={removePost} posts={sortAndSearch} title={'Post List'}/>
-            :
-            <h1 style={{textAlign: 'center'}}>No Posts</h1>
-        }
+        <MyButton style={{marginTop: 20}} onClick={() => setModal(true)}>
+            Add Post
+        </MyButton>
+        <MyModal visible={modal} set={setModal}>
+            <PostForm addPost={createPost}/>
+        </MyModal>
+        <hr style={{margin: '15px 0'}}/>
+        <PostFilter filter={filter} setFilter={setFilter}/>
+        <PostList rem={removePost} posts={sortAndSearch} title={'Post List'}/>
     </div>
   );
 }
