@@ -7,13 +7,17 @@ import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/buttons/MyButton";
 import {useSortAndSearch} from "./hooks/usePosts";
 import PostService from "./API/PostService";
+import {useFetching} from "./hooks/useFetching";
 
 function App() {
     const [posts, setPosts] = useState([])
     const [filter, setFilter] = useState({sort:'', search:''})
     const [modal, setModal] = useState(false)
-    const [isLoading, setLoading] = useState(false)
     const sortAndSearch = useSortAndSearch(posts, filter.sort, filter.search )
+    const [fetchPosts, isLoading, loadingError ] = useFetching(async () => {
+        const result = await PostService.getAll();
+        setPosts(result)
+    })
 
 
 
@@ -21,12 +25,6 @@ function App() {
         fetchPosts()
     },[])
 
-    async function fetchPosts() {
-        setLoading(true)
-        const result = await PostService.getAll();
-        setPosts(result)
-        setLoading(false)
-    }
     function createPost(post) {
         setPosts([...posts, post])
         setModal(false)
@@ -51,6 +49,7 @@ function App() {
         </MyModal>
         <hr style={{margin: '15px 0'}}/>
         <PostFilter filter={filter} setFilter={setFilter}/>
+        {loadingError && <h1>{loadingError}</h1>}
         {isLoading ? <h1 style={{textAlign: 'center'}}>Loading.....</h1>
         :
         <PostList rem={removePost} posts={sortAndSearch} title={'Post List'}/>}
