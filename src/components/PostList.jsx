@@ -12,13 +12,13 @@ const PostList = ({posts, title, rem}) => {
                 {title}
             </h1>
             <TransitionGroup>
-                {posts.map( (e, index)=>
+                {posts.map( (e)=>
                     <CSSTransition
                         key={e.id}
                         timeout={500}
                         classNames='post'
                     >
-                        <PostItem index={index} rem={rem}  post={e}/>
+                        <PostItem id={e.id} rem={rem}  post={e}/>
                     </CSSTransition>
                 )}
             </TransitionGroup>

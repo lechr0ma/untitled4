@@ -8,22 +8,29 @@ import MyButton from "./components/UI/buttons/MyButton";
 import {useSortAndSearch} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import {useFetching} from "./hooks/useFetching";
+import {pagesCount} from "./functions/pages";
+import {usePagesCount} from "./hooks/usePagesCount";
+import PostCounter from "./components/PostCounter";
 
 function App() {
     const [posts, setPosts] = useState([])
     const [filter, setFilter] = useState({sort:'', search:''})
     const [modal, setModal] = useState(false)
+    const [pages, setPages] = useState({total: 0, limit: 10, current: 1})
     const sortAndSearch = useSortAndSearch(posts, filter.sort, filter.search )
     const [fetchPosts, isLoading, loadingError ] = useFetching(async () => {
-        const result = await PostService.getAll();
-        setPosts(result)
+        const result = await PostService.getAll(pages.limit, pages.current);
+        setPosts(result.data)
+        const totalCount = result.headers['x-total-count']
+        setPages({...pages, total: pagesCount(totalCount, pages.limit)})
     })
+    const pagesArray = usePagesCount(pages.total);
 
 
 
     useEffect(() => {
         fetchPosts()
-    },[])
+    },[pages.current])
 
     function createPost(post) {
         setPosts([...posts, post])
@@ -53,6 +60,7 @@ function App() {
         {isLoading ? <h1 style={{textAlign: 'center'}}>Loading.....</h1>
         :
         <PostList rem={removePost} posts={sortAndSearch} title={'Post List'}/>}
+        <PostCounter pagesArray={pagesArray} pages={pages} setPages={setPages}/>
     </div>
   );
 }
