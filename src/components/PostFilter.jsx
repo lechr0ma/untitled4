@@ -10,7 +10,8 @@ const PostFilter = ({filter, setFilter}) => {
                 set={(e) => setFilter({...filter, sort: e})}
                 options={[
                     {value: 'title', body: 'title'},
-                    {value: 'body', body: 'description'}
+                    {value: 'body', body: 'description'},
+                    {value: 'id', body: 'id'}
                 ]}
             />
             <MyInput value={filter.search}

@@ -6,7 +6,7 @@ const SortSelect = ({options, value, set}) => {
             <span>Sort by</span>
             <select
                 style={{
-                    outline: '2px solid teal',
+                    outline: '2px solid #2A9D8F',
                     border: 'none',
                     marginLeft: 10
                 }}

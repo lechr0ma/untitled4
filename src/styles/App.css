@@ -5,15 +5,34 @@
 }
 #root{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 .App{
-    width: 800px;
+    padding: 0 20px;
+    width: min(800px, 100vw);
+}
+.navbar{
+    background: #264653;
+    height: 50px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+.navbar__links{
+    margin-left: auto;
+}
+.post__counter{
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 .post{
     display: flex;
     padding: 15px;
-    border: 2px solid teal;
+    border: 2px solid #2A9D8F;
     margin-top: 15px;
     justify-content: space-between;
     align-items: center;
